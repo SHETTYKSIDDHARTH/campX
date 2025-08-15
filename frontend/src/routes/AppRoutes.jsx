@@ -5,10 +5,13 @@ import StudentDashboard from "../pages/StudentDashboard";
 import ProtectedRoute from './ProtectedRoute'
 import AdminLogin from '../pages/AdminLogin'
 import ChairmanLogin from '../pages/ChairmanLogin'
+import ChairmanDashboard from '../pages/ChairmanDashboard';
+import Signup from "../pages/Signup";
 export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Landingpage />} />
+      <Route path="/signup" element={<Signup/>}/>
       <Route path="/student-login" element={<StudentLogin />} />
       <Route path="/Club-login" element={<ChairmanLogin />} />
       <Route path="/Admin-login" element={<AdminLogin />} />
@@ -20,6 +23,15 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      <Route
+      path="/chairman-dashboard"
+      element={
+        <ProtectedRoute>
+          <ChairmanDashboard/>
+        </ProtectedRoute>
+      }
+      />
+
     </Routes>
   );
 }

@@ -4,10 +4,10 @@ import User from "../models/user.model.js";
 
 const userLogin = async (req, res) => {
   try {
-    const { email, password } = req.body; // use "password"
+    const { email, password,role } = req.body; // use "password"
 
-    if (!email || !password)
-      return res.status(400).json({ message: "Email and password are required" });
+    if (!email || !password || !role)
+      return res.status(400).json({ message: "Input fields missing" });
 
     const user = await User.findOne({ email: email.toLowerCase() });
     if (!user)
@@ -19,13 +19,14 @@ const userLogin = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch)
       return res.status(401).json({ message: "Invalid email or password" });
-
+    if(user.role != role)
+      return res.status(400).json({message:"Invalid request gateway"})
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
-
+    console.log(user.role)
     return res.status(200).json({ token });
   } catch (error) {
     console.error("Login error:", error);
