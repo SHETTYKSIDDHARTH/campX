@@ -107,7 +107,7 @@ function ChairmanLogin() {
       {/* Main Content - Centered Card */}
       <div className="flex-grow flex items-center justify-center px-4">
         <div className="w-full sm:w-2/3 md:w-1/3 bg-gray-900 p-8 rounded-lg text-white space-y-4">
-          <h1 className="text-xl font-bold text-center">Chairman Login</h1>
+          <h1 className="text-xl font-bold text-center">Club Login</h1>
 
           {error && <div className="text-red-500 text-sm text-center">{error}</div>}
 

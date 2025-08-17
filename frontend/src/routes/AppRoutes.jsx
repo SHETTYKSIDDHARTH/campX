@@ -7,6 +7,7 @@ import AdminLogin from '../pages/AdminLogin'
 import ChairmanLogin from '../pages/ChairmanLogin'
 import ChairmanDashboard from '../pages/ChairmanDashboard';
 import Signup from "../pages/Signup";
+import AdminDashboard from "../pages/AdminDashboard";
 export default function AppRoutes() {
   return (
     <Routes>
@@ -32,6 +33,14 @@ export default function AppRoutes() {
       }
       />
 
+      <Route
+      path="/Admin-dashboard"
+      element={
+        <ProtectedRoute>
+          <AdminDashboard/>
+        </ProtectedRoute>
+      }
+      />
     </Routes>
   );
 }
