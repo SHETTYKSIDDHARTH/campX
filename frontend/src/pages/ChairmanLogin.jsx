@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { BackendURL } from "../../config.js";
 import axios from "axios";
-
+import {useAuth} from '../context/AuthContext.jsx'
 function ChairmanLogin() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,7 +26,8 @@ function ChairmanLogin() {
       });
 
       if (res.data.token) {
-        localStorage.setItem("token", res.data.token);
+         login(res.data.token, { email, role }); 
+         localStorage.setItem('token',res.data.token)
         navigate("/chairman-dashboard");
       } else {
         setError(res.data.message || "Login failed");

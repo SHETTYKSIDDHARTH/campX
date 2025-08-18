@@ -17,12 +17,12 @@ export default function HomeNavbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           
-          {/* Logo */}
+         
           <Link to="/" className="text-2xl font-bold text-white tracking-wide">
             MyApp
           </Link>
 
-          {/* Desktop Links */}
+          
           <div className="hidden lg:flex space-x-8">
             {navLinks.map((link) => (
               <Link
@@ -35,11 +35,10 @@ export default function HomeNavbar() {
             ))}
           </div>
 
-          {/* Mobile Menu Button */}
           <div className="lg:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-white p-2 rounded-md focus:outline-none"
+              className="text-white p-2 rounded-md focus:outline-none z-50"
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -47,21 +46,21 @@ export default function HomeNavbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+   
       {isOpen && (
-        <div className="lg:hidden bg-white/20 backdrop-blur-lg border-t border-white/30 px-4 py-4">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              to={link.path}
-              className="block text-white py-2 hover:text-green-300 transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              {link.name}
-            </Link>
-          ))}
-        </div>
-      )}
+  <div className="absolute top-16 left-0 w-full z-50 bg-white/20 backdrop-blur-lg border-t border-white/30 px-4 py-4">
+    {navLinks.map((link) => (
+      <Link
+        key={link.name}
+        to={link.path}
+        className="block text-white py-2 hover:text-green-300 transition-colors"
+        onClick={() => setIsOpen(false)}
+      >
+        {link.name}
+      </Link>
+    ))}
+  </div>
+)}
     </nav>
   );
 }

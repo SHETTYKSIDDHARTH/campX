@@ -99,7 +99,7 @@ export const updateEvent = async (req, res) => {
       return res.status(403).json({ error: "You can only update your own events" });
     }
 
-    let posterUrl = event.poster; // Keep old poster if no new one is uploaded
+    let posterUrl = event.poster; 
     if (req.file) {
       const result = await cloudinary.v2.uploader.upload(req.file.path, {
         folder: "event_posters"
@@ -108,9 +108,10 @@ export const updateEvent = async (req, res) => {
       fs.unlinkSync(req.file.path);
     }
 
-    event.title = req.body.title || event.title;
-    event.date = req.body.date || event.date;
-    event.description = req.body.description || event.description;
+    // Update only provided fields
+    if (req.body.title) event.title = req.body.title;
+    if (req.body.date) event.date = req.body.date;
+    if (req.body.description) event.description = req.body.description;
     event.poster = posterUrl;
 
     await event.save();
@@ -120,6 +121,7 @@ export const updateEvent = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
 
 export const deleteEvent = async (req, res) => {
   try {
@@ -139,5 +141,18 @@ export const deleteEvent = async (req, res) => {
     res.json({ message: "Event deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+//get club events
+export const getmyevents = async (req, res) => {
+  try {
+    const id = req.user._id.toString();
+    const data = await Event.find({ createdBy: id });
+
+    return res.status(200).json({ message: data });
+  } catch (error) {
+    console.error("Error while loading your event:", error);
+    return res.status(400).json({ message: error.message });
   }
 };

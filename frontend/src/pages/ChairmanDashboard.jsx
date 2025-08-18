@@ -1,8 +1,12 @@
 import React from 'react'
-
+import ChairmanNav from '../components/ChairmanNav'
+import CreateEvent from '../components/CreateEvent'
 function ChairmanDashboard() {
   return (
-    <div>ChairmanDashboard</div>
+    <div className='bg-black min-w-full'>
+      <ChairmanNav/>
+      <CreateEvent/>
+    </div>
   )
 }
 

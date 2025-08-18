@@ -8,6 +8,9 @@ import ChairmanLogin from '../pages/ChairmanLogin'
 import ChairmanDashboard from '../pages/ChairmanDashboard';
 import Signup from "../pages/Signup";
 import AdminDashboard from "../pages/AdminDashboard";
+import Allevents from "../pages/Allevents";
+import Myevents from "../pages/Myevents";
+import UpdateEvent from "../pages/UpdateEvent";
 export default function AppRoutes() {
   return (
     <Routes>
@@ -32,7 +35,14 @@ export default function AppRoutes() {
         </ProtectedRoute>
       }
       />
-
+      <Route
+      path="/my-event"
+      element={
+        <ProtectedRoute>
+          <Myevents/>
+        </ProtectedRoute>
+      }
+      />
       <Route
       path="/Admin-dashboard"
       element={
@@ -40,6 +50,23 @@ export default function AppRoutes() {
           <AdminDashboard/>
         </ProtectedRoute>
       }
+      />
+
+       <Route
+      path="/all-events"
+      element={
+        <ProtectedRoute>
+          <Allevents/>
+        </ProtectedRoute>
+      }
+      />
+      <Route
+        path="/update-event/:id"
+        element={
+          <ProtectedRoute>
+            <UpdateEvent />
+          </ProtectedRoute>
+        }
       />
     </Routes>
   );
