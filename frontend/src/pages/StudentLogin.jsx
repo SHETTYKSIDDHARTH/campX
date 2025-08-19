@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { BackendURL } from "../../config.js";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext.jsx";
 
 function StudentLogin() {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ function StudentLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const role = "student";
+  const { login } = useAuth();
 
   const loginreq = async () => {
     if (!email || !password) {
@@ -21,14 +22,19 @@ function StudentLogin() {
       const res = await axios.post(`${BackendURL}/auth/login`, {
         email,
         password,
-        role,
+        role: "student", // keep only if backend requires it
       });
 
       if (res.data.token) {
+        // save token + user info in context
+        login(res.data.token, { email, role: "student" });
+        
+        // make sure token is available globally
         localStorage.setItem("token", res.data.token);
+
         navigate("/student-dashboard");
       } else {
-        setError(res.data.message || "Login failed");
+        setError(res.data.message || "Login failed. Try again.");
       }
     } catch (err) {
       setError(err.response?.data?.message || "Error connecting to server");
@@ -51,16 +57,28 @@ function StudentLogin() {
 
             {/* Desktop Menu */}
             <div className="hidden lg:flex space-x-2 xl:space-x-3">
-              <button className="px-3 xl:px-4 py-2 text-sm text-white/90 hover:text-white" onClick={() => navigate("/")}>
+              <button
+                className="px-3 xl:px-4 py-2 text-sm text-white/90 hover:text-white"
+                onClick={() => navigate("/")}
+              >
                 Home
               </button>
-              <button className="px-3 xl:px-4 py-2 text-sm text-white/90 hover:text-white" onClick={() => navigate("/student-login")}>
+              <button
+                className="px-3 xl:px-4 py-2 text-sm text-white/90 hover:text-white"
+                onClick={() => navigate("/student-login")}
+              >
                 Student Login
               </button>
-              <button className="px-3 xl:px-4 py-2 text-sm text-white/90 hover:text-blue-600" onClick={() => navigate("/Club-login")}>
+              <button
+                className="px-3 xl:px-4 py-2 text-sm text-white/90 hover:text-blue-600"
+                onClick={() => navigate("/Club-login")}
+              >
                 Club Login
               </button>
-              <button className="px-3 xl:px-4 py-2 text-sm text-white/90 hover:text-blue-500 rounded-lg" onClick={() => navigate("/Admin-login")}>
+              <button
+                className="px-3 xl:px-4 py-2 text-sm text-white/90 hover:text-blue-500 rounded-lg"
+                onClick={() => navigate("/Admin-login")}
+              >
                 Admin Login
               </button>
             </div>
@@ -71,7 +89,11 @@ function StudentLogin() {
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="text-white/80 hover:text-white p-2"
               >
-                {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                {isMobileMenuOpen ? (
+                  <X className="w-6 h-6" />
+                ) : (
+                  <Menu className="w-6 h-6" />
+                )}
               </button>
             </div>
           </div>
@@ -86,16 +108,28 @@ function StudentLogin() {
           >
             <div className="px-4 py-6 space-y-4">
               <div className="pt-4 border-t border-white/20 space-y-3">
-                <button className="block w-full text-left px-4 py-3 text-white/90 hover:bg-white/10 rounded-lg" onClick={() => navigate("/")}>
+                <button
+                  className="block w-full text-left px-4 py-3 text-white/90 hover:bg-white/10 rounded-lg"
+                  onClick={() => navigate("/")}
+                >
                   Home
                 </button>
-                <button className="block w-full text-left px-4 py-3 text-white/90 hover:bg-white/10 rounded-lg" onClick={() => navigate("/student-login")}>
+                <button
+                  className="block w-full text-left px-4 py-3 text-white/90 hover:bg-white/10 rounded-lg"
+                  onClick={() => navigate("/student-login")}
+                >
                   Student Login
                 </button>
-                <button className="block w-full text-left px-4 py-3 text-white/90 hover:bg-white/10 rounded-lg" onClick={() => navigate("/Club-login")}>
+                <button
+                  className="block w-full text-left px-4 py-3 text-white/90 hover:bg-white/10 rounded-lg"
+                  onClick={() => navigate("/Club-login")}
+                >
                   Club Login
                 </button>
-                <button className="block w-full text-left px-4 py-3 text-white/90 hover:bg-blue-500 rounded-lg" onClick={() => navigate("/Admin-login")}>
+                <button
+                  className="block w-full text-left px-4 py-3 text-white/90 hover:bg-blue-500 rounded-lg"
+                  onClick={() => navigate("/Admin-login")}
+                >
                   Admin Login
                 </button>
               </div>
@@ -109,7 +143,9 @@ function StudentLogin() {
         <div className="w-full sm:w-2/3 md:w-1/3 bg-gray-900 p-8 rounded-lg text-white space-y-4">
           <h1 className="text-xl font-bold text-center">Student Login</h1>
 
-          {error && <div className="text-red-500 text-sm text-center">{error}</div>}
+          {error && (
+            <div className="text-red-500 text-sm text-center">{error}</div>
+          )}
 
           {/* Email */}
           <div>

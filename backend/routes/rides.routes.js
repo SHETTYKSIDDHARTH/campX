@@ -7,7 +7,9 @@ import {
   mylistedRides,
   bookRide,
   viewBookingReq,
-  decideBookingReq
+  decideBookingReq,
+  myBookings,
+  cancelBooking
 } from '../controller/rides.controller.js';
 import {
   authMiddleware,
@@ -40,5 +42,11 @@ RidesRouter.get('/bookings/requests', authMiddleware, studentMiddleware, viewBoo
 
 // Authenticated Student: Accept or reject booking requests
 RidesRouter.patch('/bookings/:bookingId/decision', authMiddleware, studentMiddleware, decideBookingReq);
+
+// Authenticated Student: View their own bookings
+RidesRouter.get('/bookings/my', authMiddleware, studentMiddleware, myBookings);
+
+// Authenticated Student: Cancel their own booking
+RidesRouter.patch('/bookings/:bookingId/cancel', authMiddleware, studentMiddleware, cancelBooking);
 
 export default RidesRouter;

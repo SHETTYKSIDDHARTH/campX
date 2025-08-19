@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { BackendURL } from "../../config.js";
 import axios from "axios";
-import {useAuth} from '../context/AuthContext.jsx'
+import { useAuth } from "../context/AuthContext.jsx";
+
 function ChairmanLogin() {
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -25,9 +26,11 @@ function ChairmanLogin() {
         role,
       });
 
-      if (res.data.token) {
-         login(res.data.token, { email, role }); 
-         localStorage.setItem('token',res.data.token)
+      if (res.data?.token) {
+        // ✅ Save token and user details properly
+        localStorage.setItem("token", res.data.token);
+        login(res.data.token, { email: res.data.user?.email, role: res.data.user?.role || role });
+
         navigate("/chairman-dashboard");
       } else {
         setError(res.data.message || "Login failed");
@@ -53,18 +56,10 @@ function ChairmanLogin() {
 
             {/* Desktop Menu */}
             <div className="hidden lg:flex space-x-2 xl:space-x-3">
-              <button className="px-3 xl:px-4 py-2 text-sm text-white/90 hover:text-white" onClick={() => navigate("/")}>
-                Home
-              </button>
-              <button className="px-3 xl:px-4 py-2 text-sm text-white/90 hover:text-white" onClick={() => navigate("/student-login")}>
-                Student Login
-              </button>
-              <button className="px-3 xl:px-4 py-2 text-sm text-white/90 hover:text-blue-600" onClick={() => navigate("/Club-login")}>
-                Club Login
-              </button>
-              <button className="px-3 xl:px-4 py-2 text-sm text-white/90 hover:text-blue-500 rounded-lg" onClick={() => navigate("/Admin-login")}>
-                Admin Login
-              </button>
+              <button onClick={() => navigate("/")} className="px-3 xl:px-4 py-2 text-sm text-white/90 hover:text-white">Home</button>
+              <button onClick={() => navigate("/student-login")} className="px-3 xl:px-4 py-2 text-sm text-white/90 hover:text-white">Student Login</button>
+              <button onClick={() => navigate("/Club-login")} className="px-3 xl:px-4 py-2 text-sm text-white/90 hover:text-blue-600">Club Login</button>
+              <button onClick={() => navigate("/Admin-login")} className="px-3 xl:px-4 py-2 text-sm text-white/90 hover:text-blue-500">Admin Login</button>
             </div>
 
             {/* Mobile Menu Toggle */}
@@ -81,32 +76,22 @@ function ChairmanLogin() {
           {/* Mobile Menu */}
           <div
             className={`lg:hidden absolute top-16 left-0 w-full bg-black/95 backdrop-blur-xl border-b border-white/20 transition-all duration-300 ${
-              isMobileMenuOpen
-                ? "opacity-100 translate-y-0 pointer-events-auto"
-                : "opacity-0 -translate-y-4 pointer-events-none"
+              isMobileMenuOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-4 pointer-events-none"
             }`}
           >
             <div className="px-4 py-6 space-y-4">
               <div className="pt-4 border-t border-white/20 space-y-3">
-                <button className="block w-full text-left px-4 py-3 text-white/90 hover:bg-white/10 rounded-lg" onClick={() => navigate("/")}>
-                  Home
-                </button>
-                <button className="block w-full text-left px-4 py-3 text-white/90 hover:bg-white/10 rounded-lg" onClick={() => navigate("/student-login")}>
-                  Student Login
-                </button>
-                <button className="block w-full text-left px-4 py-3 text-white/90 hover:bg-white/10 rounded-lg" onClick={() => navigate("/Club-login")}>
-                  Club Login
-                </button>
-                <button className="block w-full text-left px-4 py-3 text-white/90 hover:bg-blue-500 rounded-lg" onClick={() => navigate("/Admin-login")}>
-                  Admin Login
-                </button>
+                <button onClick={() => navigate("/")} className="block w-full text-left px-4 py-3 text-white/90 hover:bg-white/10 rounded-lg">Home</button>
+                <button onClick={() => navigate("/student-login")} className="block w-full text-left px-4 py-3 text-white/90 hover:bg-white/10 rounded-lg">Student Login</button>
+                <button onClick={() => navigate("/Club-login")} className="block w-full text-left px-4 py-3 text-white/90 hover:bg-white/10 rounded-lg">Club Login</button>
+                <button onClick={() => navigate("/Admin-login")} className="block w-full text-left px-4 py-3 text-white/90 hover:bg-blue-500 rounded-lg">Admin Login</button>
               </div>
             </div>
           </div>
         </div>
       </nav>
 
-      {/* Main Content - Centered Card */}
+      {/* Main Content */}
       <div className="flex-grow flex items-center justify-center px-4">
         <div className="w-full sm:w-2/3 md:w-1/3 bg-gray-900 p-8 rounded-lg text-white space-y-4">
           <h1 className="text-xl font-bold text-center">Club Login</h1>
@@ -143,13 +128,9 @@ function ChairmanLogin() {
             Login
           </button>
 
-          {/* Signup Link Inside Card */}
           <div className="text-center text-sm mt-4">
             Not signed up yet?{" "}
-            <button
-              onClick={() => navigate("/signup")}
-              className="text-violet-400 hover:underline"
-            >
+            <button onClick={() => navigate("/signup")} className="text-violet-400 hover:underline">
               Signup
             </button>
           </div>
